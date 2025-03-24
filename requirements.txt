@@ -1,0 +1,12 @@
+PyMuPDF
+streamlit
+google-generativeai
+pdf2image
+fastapi 
+uvicorn 
+spacy
+PyPDF2
+
+
+
+
