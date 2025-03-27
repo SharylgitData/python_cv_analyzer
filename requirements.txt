@@ -6,7 +6,3 @@ fastapi
 uvicorn 
 spacy
 PyPDF2
-
-
-
-

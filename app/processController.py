@@ -33,7 +33,7 @@ async def upload_pdf(
 
         # result = evaluator.evaluate_resume(file_stream, job_description, personality, prompt_type="rank" )
         result = evaluator.extract_resume_info(file_stream, job_description, personality, prompt_type="rank")
-        return {"response": result}
+        return result
 
     except Exception as e:
         import traceback
