@@ -7,7 +7,6 @@ import PyPDF2
 import json
 import re
 import os
-import openai
 import pdb;
 #genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 # genai.configure(api_key="AIzaSyBguHoVHGD7YngrnoYONC7yDqP8DvIEzho")
@@ -272,21 +271,21 @@ class ResumeEvaluator:
         return response.text
     
    
-    def evaluate_the_resume(self, extracted_text, prompt):
+    # def evaluate_the_resume(self, extracted_text, prompt):
     
     
-    # Create a chat completion using gpt-3.5-turbo
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": prompt},
-                {"role": "system", "content": extracted_text}
-            ],
-            max_tokens=500 
+    # # Create a chat completion using gpt-3.5-turbo
+    #     response = openai.ChatCompletion.create(
+    #         model="gpt-3.5-turbo",
+    #         messages=[
+    #             {"role": "system", "content": prompt},
+    #             {"role": "system", "content": extracted_text}
+    #         ],
+    #         max_tokens=500 
            
-        )
-        res = response['choices'][0]['message']['content']
-        print("the evaluated resume respones using openai is ", res)
-        # Extract and return the assistant's reply
-        return res
+    #     )
+    #     res = response['choices'][0]['message']['content']
+    #     print("the evaluated resume respones using openai is ", res)
+    #     # Extract and return the assistant's reply
+    #     return res
 
