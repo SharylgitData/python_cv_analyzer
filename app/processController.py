@@ -13,8 +13,7 @@ app = FastAPI()
 async def upload_pdf(
     file: UploadFile = File(...),
     personality: str = Form(...),
-    emailId: str = Form(...),
-    job_id: str = Form(...),
+    job_title: str = Form(...),
     job_description: str = Form(...)
     
 ):
@@ -28,11 +27,13 @@ async def upload_pdf(
         contents = await file.read()
         file_stream = io.BytesIO(contents)
 
-        print("📄 Resume uploaded: ", file.filename)
-        print("🧠 Job Description: ", job_description)
+        print("Resume uploaded: ", file.filename)
+        print("job_title: ", job_title)
+        print("Job Description: ", job_description)
+        print("personality: ", personality)
 
         # result = evaluator.evaluate_resume(file_stream, job_description, personality, prompt_type="rank" )
-        result = evaluator.extract_resume_info(file_stream, job_description, personality, prompt_type="rank")
+        result = evaluator.extract_resume_info(file_stream, job_description, personality, job_title, prompt_type="rank")
         return result
 
     except Exception as e:
