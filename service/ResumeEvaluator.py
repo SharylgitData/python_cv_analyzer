@@ -7,6 +7,7 @@ import PyPDF2
 import json
 import re
 import os
+import openai
 import pdb;
 #genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 # genai.configure(api_key="AIzaSyBguHoVHGD7YngrnoYONC7yDqP8DvIEzho")
@@ -106,8 +107,8 @@ class ResumeEvaluator:
                 Your role is to assess a resume against the provided job description: '{jobdescription}' for the role: '{job_title}', 
                 factoring in the user's personality: '{personality}' and the personality derived from the resume: '{resumePersonality}'.
 
-                IN THE RESPONSE ONLY GIVE THE rank AND reason in the format : rank&reason
-                You must output only the final match score from 0 to 10, followed by a reason. STRICTLY USE THIS FORMAT : rank&reason (e.g., 7&reason of the score given).
+                IN THE RESPONSE ONLY GIVE THE rank, reason  AND area of improvement in the format : rank&reason&area_of_improvement
+                You must output only the final match score from 0 to 10, followed by a reason followed by the area of improvement. STRICTLY USE THIS FORMAT : rank&reason&area_of_improvement (e.g., 7&reason of the score given&You should focus more on skills...).
 
                 Scoring:
                 - Total: 100% split into:
@@ -137,7 +138,7 @@ class ResumeEvaluator:
                 - Ignore URLs and external links.
                 - Do not include irrelevant or unrelated experience in reasoning.
                 - Do not penalize for missing skills not mentioned in job description.
-                - Return output strictly as: rank&reason
+                - Return output strictly as: rank&reason&area_of_improvement
 
                 """
 
@@ -222,7 +223,7 @@ class ResumeEvaluator:
         
         # resume = self.evaluate_the_resume(entities, prompt)
 
-        resumeInfo = resumeData.split("&",1)
+        resumeInfo = resumeData.split("&")
         print("the rank of the user is", resumeInfo)
 
        
@@ -239,7 +240,7 @@ class ResumeEvaluator:
         # print("the rank attached ",entity_dict)
         entity_dict['reason'] = resumeInfo[1]
         # print("the reason attached ",entity_dict)
-
+        entity_dict['area_of_improvement']= resumeInfo[2]
         
     
         
@@ -271,21 +272,21 @@ class ResumeEvaluator:
         return response.text
     
    
-    # def evaluate_the_resume(self, extracted_text, prompt):
+    def evaluate_the_resume(self, extracted_text, prompt):
     
     
-    # # Create a chat completion using gpt-3.5-turbo
-    #     response = openai.ChatCompletion.create(
-    #         model="gpt-3.5-turbo",
-    #         messages=[
-    #             {"role": "system", "content": prompt},
-    #             {"role": "system", "content": extracted_text}
-    #         ],
-    #         max_tokens=500 
+    # Create a chat completion using gpt-3.5-turbo
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "system", "content": extracted_text}
+            ],
+            max_tokens=500 
            
-    #     )
-    #     res = response['choices'][0]['message']['content']
-    #     print("the evaluated resume respones using openai is ", res)
-    #     # Extract and return the assistant's reply
-    #     return res
+        )
+        res = response['choices'][0]['message']['content']
+        print("the evaluated resume respones using openai is ", res)
+        # Extract and return the assistant's reply
+        return res
 
